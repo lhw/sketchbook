@@ -12,7 +12,7 @@ static uint8_t myip[4] = {
 static uint8_t buf[BUFFER_SIZE+1];
 
 EtherShield es=EtherShield();
-RCSwitch mySwitch = RCSwitch();
+RCSwitch ok = RCSwitch();
 
 uint16_t httpOK() {
   return es.ES_fill_tcp_data_p(buf, 0, PSTR("HTTP/1.0 200 OK\r\nContent-Type: text/html\r\nPragma: no-cache\r\n\r\n"));
@@ -65,9 +65,9 @@ void loop() {
       len = httpOK();
       if(c != -1 && d != -1 && s != -1) {
         if(s == 1)
-          mySwitch.switchOn(c, d + 1);
+          ok.switchOn(c, d + 1);
         else
-          mySwitch.switchOff(c, d + 1);
+          ok.switchOff(c, d + 1);
         len = es.ES_fill_tcp_data_p(buf, len, PSTR("{\"result\":true}"));
       }
       else
