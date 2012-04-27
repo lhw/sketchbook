@@ -3,7 +3,12 @@
 #include <RCSwitch.h>
 
 #define WWWPORT 80
-#define BUFFER_SIZE 200 // ATMEGA 168 smaller ~> no http return bigger ~> no space for operations
+#define TXPORT 8
+#define DEVICE_OFFSET 1
+#define BUFFER_SIZE 200 // ATMEGA 168 smaller ~> no http return; bigger ~> no space for operations
+
+
+#define DEVICE(a) (a+DEVICE_OFFSET)
 #define FAIL PSTR("{\"result\":false}")
 #define SUCCESS PSTR("{\"result\":true}")
 
@@ -30,7 +35,7 @@ void setup(){
   es.ES_enc28j60Init(mymac);
   es.ES_init_ip_arp_udp_tcp(mymac, myip, WWWPORT);
 
-  swt.enableTransmit(8);
+  swt.enableTransmit(TXPORT);
 }
 
 void loop() {
@@ -64,9 +69,9 @@ void loop() {
 
     if(c != -1 && d != -1 && s != -1) {
       if(s == 1)
-        swt.switchOn(c, d + 1);
+        swt.switchOn(c, DEVICE(d));
       else
-        swt.switchOff(c, d + 1);
+        swt.switchOff(c, DEVICE(d));
 
       es_len = httpOK();
       es_len = es.ES_fill_tcp_data_p(buf, es_len, SUCCESS);
