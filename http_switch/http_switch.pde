@@ -2,9 +2,9 @@
 #include <etherShield.h>
 #include <RCSwitch.h>
 
-#define WWWPORT 80
-#define TXPORT 8
-#define DEVICE_OFFSET 1
+#define HTTPPORT 80
+#define TXPORT 8 //Port for the TX channel on the Arduino board
+#define DEVICE_OFFSET 1 //Offset of your device on the channel
 #define BUFFER_SIZE 200 // ATMEGA 168 smaller ~> no http return; bigger ~> no space for operations
 
 
@@ -12,9 +12,9 @@
 #define FAIL PSTR("{\"result\":false}")
 #define SUCCESS PSTR("{\"result\":true}")
 
-static uint8_t mymac[6] = {
+static uint8_t MAC[6] = {
   0x54,0x55,0x58,0x10,0x00,0x24}; 
-static uint8_t myip[4] = {
+static uint8_t IP[4] = {
   192,168,1,11};
 static uint8_t buf[BUFFER_SIZE+1];
 
@@ -32,8 +32,8 @@ uint16_t httpOK() {
 void setup(){
   Serial.begin(9600);
 
-  es.ES_enc28j60Init(mymac);
-  es.ES_init_ip_arp_udp_tcp(mymac, myip, WWWPORT);
+  es.ES_enc28j60Init(MAC);
+  es.ES_init_ip_arp_udp_tcp(MAC, IP, HTTPPORT);
 
   swt.enableTransmit(TXPORT);
 }
