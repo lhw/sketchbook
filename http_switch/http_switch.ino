@@ -1,4 +1,4 @@
-// EtherShield webserver demo
+//TX433 control server with HTTP GET
 #include <etherShield.h>
 #include <RCSwitch.h>
 
