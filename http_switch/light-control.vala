@@ -29,8 +29,7 @@ public class Light : GLib.Object {
 
 	static void on_bus_aquired(DBusConnection con) {
 		try {
-			Light l = new Light();
-			con.register_object("/de/ring0/lhw/light", l);
+			con.register_object("/de/ring0/lhw/light", new Light());
 		}
 		catch(IOError e) {
 			syslog(LOG_ERR, e.message);
