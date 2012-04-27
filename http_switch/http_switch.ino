@@ -11,6 +11,7 @@
 #define DEVICE(a) (a+DEVICE_OFFSET)
 #define FAIL PSTR("{\"result\":false}")
 #define SUCCESS PSTR("{\"result\":true}")
+#define HTTP200 PSTR("HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nPragma: no-cache\r\n\r\n")
 
 static uint8_t MAC[6] = {
   0x54,0x55,0x58,0x10,0x00,0x24}; 
@@ -24,10 +25,6 @@ RCSwitch swt = RCSwitch();
 int c, d, s;
 uint16_t es_len;
 char *request;
-
-uint16_t httpOK() {
-  return es.ES_fill_tcp_data_p(buf, 0, PSTR("HTTP/1.0 200 OK\r\nContent-Type: application/json\r\nPragma: no-cache\r\n\r\n"));
-}
 
 void setup(){
   Serial.begin(9600);
@@ -73,25 +70,16 @@ void loop() {
       else
         swt.switchOff(c, DEVICE(d));
 
-      es_len = httpOK();
+      es_len = es.ES_fill_tcp_data_p(buf, 0, HTTP200);
       es_len = es.ES_fill_tcp_data_p(buf, es_len, SUCCESS);
       es.ES_www_server_reply(buf, es_len);
       return;
     }
   }
-  
-  es_len = httpOK();
+
+  es_len = es.ES_fill_tcp_data_p(buf, 0, HTTP200);
   es_len = es.ES_fill_tcp_data_p(buf, es_len, FAIL);
   es.ES_www_server_reply(buf, es_len);
 }
-
-
-
-
-
-
-
-
-
 
 
