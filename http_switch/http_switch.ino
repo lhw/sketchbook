@@ -56,16 +56,13 @@ void loop() {
         sscanf(f+1, "d=%d", &d);
       }
       else if(*(f+1) == 's') {
-        if(strncmp(f+3, "on", 2) == 0)
-          s = 1;
-        else
-          s = 0;
+        s = strncmp(f+3, "on", 2);
       }
     } 
     while((f = strchr(f+1, '&')) != NULL);
 
     if(c != -1 && d != -1 && s != -1) {
-      if(s == 1)
+      if(s == 0)
         swt.switchOn(c, DEVICE(d));
       else
         swt.switchOff(c, DEVICE(d));
